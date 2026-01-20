@@ -31,3 +31,7 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# Arquivos de configuração com dados sensíveis
+application.properties
+docker-compose.yml
