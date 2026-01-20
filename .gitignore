@@ -33,5 +33,5 @@ build/
 .vscode/
 
 # Arquivos de configuração com dados sensíveis
-application.properties
+src/main/resources/application.properties
 docker-compose.yml
