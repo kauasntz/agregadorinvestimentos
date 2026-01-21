@@ -17,16 +17,13 @@ public class UserService {
         this.userReposiory = userReposiory;
     }
 
-        public UUID createUser(CreateUserdDto createUserdDto) {
-
-        //DTO -> Entity
-        var entity = new User(
-                UUID.randomUUID(),
-                createUserdDto.username(),
-                createUserdDto.email(),
-                createUserdDto.password(),
-                Instant.now(),
-                null);
+    public UUID createUser(CreateUserdDto createUserdDto) {
+        var entity = new User();
+        entity.setUsername(createUserdDto.username());
+        entity.setEmail(createUserdDto.email());
+        entity.setPassword(createUserdDto.password());
+        // userId gerado por @GeneratedValue
+        // timestamps gerados por @CreationTimestamp e @UpdateTimestamp
 
         var userSaved = userReposiory.save(entity);
         return userSaved.getUserId();
