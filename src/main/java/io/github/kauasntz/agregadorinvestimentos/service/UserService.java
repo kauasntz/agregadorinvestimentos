@@ -6,6 +6,7 @@ import io.github.kauasntz.agregadorinvestimentos.repository.UserReposiory;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -27,5 +28,9 @@ public class UserService {
 
         var userSaved = userReposiory.save(entity);
         return userSaved.getUserId();
+    }
+
+    public Optional <User> getUserById(String userId){
+        return   userReposiory.findById(UUID.fromString(userId));
     }
 }
