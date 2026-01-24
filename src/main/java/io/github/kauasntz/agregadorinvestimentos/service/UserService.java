@@ -1,6 +1,7 @@
 package io.github.kauasntz.agregadorinvestimentos.service;
 
 import io.github.kauasntz.agregadorinvestimentos.controller.CreateUserdDto;
+import io.github.kauasntz.agregadorinvestimentos.controller.UpdateUserDto;
 import io.github.kauasntz.agregadorinvestimentos.entity.User;
 import io.github.kauasntz.agregadorinvestimentos.repository.UserReposiory;
 import org.springframework.stereotype.Service;
@@ -38,6 +39,28 @@ public class UserService {
 
     public List<User> listUsers() {
         return userReposiory.findAll();
+    }
+
+    public void updateUserById(String userId,
+                               UpdateUserDto updateUserDto) {
+
+        var id = UUID.fromString(userId);
+
+        var userEntity = userReposiory.findById(id);
+
+        if (userEntity.isPresent()) {
+            var user = userEntity.get();
+
+            if (updateUserDto.username() != null) {
+                user.setUsername(updateUserDto.username());
+            }
+
+            if (updateUserDto.password() != null) {
+                user.setPassword(updateUserDto.password());
+            }
+
+            userReposiory.save(user);
+        }
     }
 
     public void deleteById(String userId){
