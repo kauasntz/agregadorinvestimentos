@@ -13,6 +13,7 @@ import java.util.UUID;
 @Service
 public class UserService {
 
+
     private UserReposiory userReposiory;
 
     public UserService(UserReposiory userReposiory) {
@@ -37,5 +38,15 @@ public class UserService {
 
     public List<User> listUsers() {
         return userReposiory.findAll();
+    }
+
+    public void deleteById(String userId){
+        var id = UUID.fromString(userId);
+
+        var userExists = userReposiory.existsById(id);
+
+        if (userExists) {
+            userReposiory.deleteById(id);
+        }
     }
 }
