@@ -15,6 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 
 import java.time.Instant;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -108,7 +109,9 @@ class UserServiceTest {
                     null
             );
 
-            doReturn(Optional.of(user)).when(userReposiory).findById(uuidArgumentCaptor.capture());
+            doReturn(Optional.of(user))
+                    .when(userReposiory)
+                    .findById(uuidArgumentCaptor.capture());
 
             // Act
             var output = userService.getUserById(user.getUserId().toString());
@@ -133,6 +136,37 @@ class UserServiceTest {
             // Assert
             assertTrue(output.isEmpty());
             assertEquals(userId, uuidArgumentCaptor.getValue());
+        }
+    }
+
+    @Nested
+    class listUsers {
+
+        @Test
+        @DisplayName("Should return all users  with success")
+        void shouldReturnAllUsersWithSuccess() {
+
+            // Arrange
+            var user = new User(
+                    UUID.randomUUID(),
+                    "username",
+                    "email@email.com",
+                    "123",
+                    Instant.now(),
+                    null
+            );
+            var userList = List.of(user);
+            doReturn(userList)
+                    .when(userReposiory)
+                    .findAll();
+
+            //  Act
+
+            var output = userService.listUsers();
+
+            // Assert
+            assertNotNull(output);
+            assertEquals(userList.size(), output.size());
         }
     }
 }
