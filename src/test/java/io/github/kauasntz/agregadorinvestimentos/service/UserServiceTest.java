@@ -1,6 +1,7 @@
 package io.github.kauasntz.agregadorinvestimentos.service;
 
 import io.github.kauasntz.agregadorinvestimentos.controller.CreateUserdDto;
+import io.github.kauasntz.agregadorinvestimentos.controller.UpdateUserDto;
 import io.github.kauasntz.agregadorinvestimentos.entity.User;
 import io.github.kauasntz.agregadorinvestimentos.repository.UserReposiory;
 import org.junit.jupiter.api.DisplayName;
@@ -121,7 +122,7 @@ class UserServiceTest {
         }
 
         @Test
-        @DisplayName("Should get user by ID with success when optional is emmpty")
+        @DisplayName("Should get user by ID with success when optional is empty")
         void shouldGetUserByIdWithSuccessWhenOptionIsEmpty() {
             // Arrange
             var userId = UUID.randomUUID();
@@ -221,4 +222,74 @@ class UserServiceTest {
         }
     }
 
+    @Nested
+    class updateUserById {
+
+        @Test
+        @DisplayName("Should update user by ID when user exists and username and password are filled")
+        void shouldUpdateUserByIdWhenUserExistsAndUsernameAndPasswordAreFilled() {
+            // Arrange
+            var updateUserDto = new UpdateUserDto(
+                    "newUsername",
+                    "newPassword"
+            );
+            var user = new User(
+                    UUID.randomUUID(),
+                    "username",
+                    "email@email.com",
+                    "123",
+                    Instant.now(),
+                    null
+            );
+
+            doReturn(Optional.of(user))
+                    .when(userReposiory)
+                    .findById(uuidArgumentCaptor.capture());
+            doReturn(user)
+                    .when(userReposiory )
+                    .save(userArgumentCaptor.capture());
+
+            // Act
+            userService.updateUserById(user.getUserId().toString(), updateUserDto);
+
+            // Assert
+            assertEquals(user.getUserId(), uuidArgumentCaptor.getValue());
+
+            var userCaptured = userArgumentCaptor.getValue();
+
+            assertEquals(updateUserDto.username(), userCaptured.getUsername());
+            assertEquals(updateUserDto.password(), userCaptured.getPassword());
+
+            verify(userReposiory, times(1))
+                    .findById(uuidArgumentCaptor.getValue());
+            verify(userReposiory, times(1))
+                    .save(user);
+        }
+
+        @Test
+        @DisplayName("Should not update user by ID when user not exists")
+        void shouldNotUpdateUserByIdWhenUserNotExists() {
+            // Arrange
+            var updateUserDto = new UpdateUserDto(
+                    "newUsername",
+                    "newPassword"
+            );
+            var userId = UUID.randomUUID();
+
+            doReturn(Optional.empty())
+                    .when(userReposiory)
+                    .findById(uuidArgumentCaptor.capture());
+
+            // Act
+            userService.updateUserById(userId.toString(), updateUserDto);
+
+            // Assert
+            assertEquals(userId, uuidArgumentCaptor.getValue());
+
+            verify(userReposiory, times(1))
+                    .findById(uuidArgumentCaptor.getValue());
+            verify(userReposiory, times(0))
+                    .save(any());
+        }
+    }
 }
