@@ -21,8 +21,7 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
@@ -143,7 +142,7 @@ class UserServiceTest {
     class listUsers {
 
         @Test
-        @DisplayName("Should return all users  with success")
+        @DisplayName("Should return all users with success")
         void shouldReturnAllUsersWithSuccess() {
 
             // Arrange
@@ -169,4 +168,57 @@ class UserServiceTest {
             assertEquals(userList.size(), output.size());
         }
     }
+
+    @Nested
+    class deleteById {
+
+        @Test
+        @DisplayName("Should delete user with success when user exists")
+        void shouldDeleteUserWithSuccessWhenUserExists() {
+            // Arrange
+            doReturn(true)
+                    .when(userReposiory)
+                    .existsById(uuidArgumentCaptor.capture());
+
+            doNothing()
+                    .when(userReposiory)
+                    .deleteById(uuidArgumentCaptor.capture());
+
+            var userId = UUID.randomUUID();
+
+            // Act
+            userService.deleteById(userId.toString());
+
+            // Assert
+            var idList = uuidArgumentCaptor.getAllValues();
+            assertEquals(userId, idList.get(0));
+            assertEquals(userId, idList.get(1));
+
+            verify(userReposiory, times(1)).existsById(idList.get(0));
+            verify(userReposiory, times(1)).deleteById(idList.get(1));
+        }
+
+
+        @Test
+        @DisplayName("Should not delete user with success when user not exists")
+        void shouldNotDeleteUserWithSuccessWhenUserNotExists() {
+            // Arrange
+            doReturn(false)
+                    .when(userReposiory)
+                    .existsById(uuidArgumentCaptor.capture());
+            var userId = UUID.randomUUID();
+
+            // Act
+            userService.deleteById(userId.toString());
+
+            // Assert
+            assertEquals(userId, uuidArgumentCaptor.getValue());
+
+            verify(userReposiory, times(1))
+                    .existsById(uuidArgumentCaptor.getValue());
+            verify(userReposiory, times(0))
+                    .deleteById(any());
+        }
+    }
+
 }
