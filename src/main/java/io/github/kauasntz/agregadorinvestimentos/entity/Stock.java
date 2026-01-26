@@ -10,7 +10,7 @@ public class Stock {
 
     @Id
     @Column(name = "stock_id")
-    private String stockId;
+    private UUID stockId;
 
     @Column(name = "description")
     private String description;
@@ -18,16 +18,16 @@ public class Stock {
     public Stock() {
     }
 
-    public Stock(String stockId, String description) {
+    public Stock(UUID stockId, String description) {
         this.stockId = stockId;
         this.description = description;
     }
 
-    public String getStockId() {
+    public UUID getStockId() {
         return stockId;
     }
 
-    public void setStockId(String stockId) {
+    public void setStockId(UUID stockId) {
         this.stockId = stockId;
     }
 

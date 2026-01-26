@@ -1,12 +1,19 @@
 package io.github.kauasntz.agregadorinvestimentos.service;
 
-import io.github.kauasntz.agregadorinvestimentos.controller.CreateUserdDto;
-import io.github.kauasntz.agregadorinvestimentos.controller.UpdateUserDto;
+import io.github.kauasntz.agregadorinvestimentos.controller.dto.CreateAccountDto;
+import io.github.kauasntz.agregadorinvestimentos.controller.dto.CreateUserdDto;
+import io.github.kauasntz.agregadorinvestimentos.controller.dto.UpdateUserDto;
+import io.github.kauasntz.agregadorinvestimentos.entity.Account;
+import io.github.kauasntz.agregadorinvestimentos.entity.BillingAddress;
 import io.github.kauasntz.agregadorinvestimentos.entity.User;
+import io.github.kauasntz.agregadorinvestimentos.repository.AccountReposiory;
+import io.github.kauasntz.agregadorinvestimentos.repository.BillingaddressReposiory;
 import io.github.kauasntz.agregadorinvestimentos.repository.UserReposiory;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
-import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -16,9 +23,15 @@ public class UserService {
 
 
     private UserReposiory userReposiory;
+    private AccountReposiory accountReposiory;
+    private BillingaddressReposiory billingaddressReposiory;
 
-    public UserService(UserReposiory userReposiory) {
+    public UserService(UserReposiory userReposiory,
+                       AccountReposiory accountReposiory,
+                       BillingaddressReposiory billingaddressReposiory) {
         this.userReposiory = userReposiory;
+        this.accountReposiory = accountReposiory;
+        this.billingaddressReposiory = billingaddressReposiory;
     }
 
     public UUID createUser(CreateUserdDto createUserdDto) {
@@ -71,5 +84,25 @@ public class UserService {
         if (userExists) {
             userReposiory.deleteById(id);
         }
+    }
+
+    public void createAccount(String userId, CreateAccountDto createAccountDto) {
+
+        var user = userReposiory.findById(UUID.fromString(userId))
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        var account = new Account();
+        account.setUser(user);
+        account.setDescription(createAccountDto.description());
+
+        var accountCreated = accountReposiory.save(account);
+
+        var billingAddress = new BillingAddress(
+                accountCreated,
+                createAccountDto.street(),
+                createAccountDto.number()
+        );
+
+        billingaddressReposiory.save(billingAddress);
     }
 }

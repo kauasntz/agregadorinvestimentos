@@ -9,7 +9,7 @@ import java.util.UUID;
 public class AccountStockId {
 
     @Column(name = "account_id")
-    private UUID accountid;
+    private UUID accountId;
 
     @Column(name = "stock_id")
     private UUID stockId;
@@ -18,7 +18,7 @@ public class AccountStockId {
     }
 
     public AccountStockId(UUID accountid, UUID stockId) {
-        this.accountid = accountid;
+        this.accountId = accountid;
         this.stockId = stockId;
     }
 
@@ -31,10 +31,10 @@ public class AccountStockId {
     }
 
     public UUID getAccountid() {
-        return accountid;
+        return accountId;
     }
 
     public void setAccountid(UUID accountid) {
-        this.accountid = accountid;
+        this.accountId = accountid;
     }
 }

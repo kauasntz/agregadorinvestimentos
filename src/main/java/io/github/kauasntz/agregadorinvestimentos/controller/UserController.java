@@ -1,5 +1,8 @@
 package io.github.kauasntz.agregadorinvestimentos.controller;
 
+import io.github.kauasntz.agregadorinvestimentos.controller.dto.CreateAccountDto;
+import io.github.kauasntz.agregadorinvestimentos.controller.dto.CreateUserdDto;
+import io.github.kauasntz.agregadorinvestimentos.controller.dto.UpdateUserDto;
 import io.github.kauasntz.agregadorinvestimentos.entity.User;
 import io.github.kauasntz.agregadorinvestimentos.service.UserService;
 import org.springframework.http.ResponseEntity;
@@ -52,5 +55,12 @@ public class UserController {
     public ResponseEntity<Void> deleteById(@PathVariable("userId") String userId) {
         userService.deleteById(userId);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/{userId}/accounts")
+    public ResponseEntity<Void> createAccount(@PathVariable("userId") String userId,
+                                           @RequestBody CreateAccountDto createAccountDto) {
+        userService.createAccount(userId, createAccountDto);
+        return ResponseEntity.ok().build();
     }
 }

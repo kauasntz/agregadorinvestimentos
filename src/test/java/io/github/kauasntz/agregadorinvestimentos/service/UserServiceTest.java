@@ -1,7 +1,7 @@
 package io.github.kauasntz.agregadorinvestimentos.service;
 
-import io.github.kauasntz.agregadorinvestimentos.controller.CreateUserdDto;
-import io.github.kauasntz.agregadorinvestimentos.controller.UpdateUserDto;
+import io.github.kauasntz.agregadorinvestimentos.controller.dto.CreateUserdDto;
+import io.github.kauasntz.agregadorinvestimentos.controller.dto.UpdateUserDto;
 import io.github.kauasntz.agregadorinvestimentos.entity.User;
 import io.github.kauasntz.agregadorinvestimentos.repository.UserReposiory;
 import org.junit.jupiter.api.DisplayName;
