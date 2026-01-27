@@ -23,8 +23,8 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody CreateUserdDto CreateUserdDto){
-        var userID = userService.createUser(CreateUserdDto);
+    public ResponseEntity<User> createUser(@RequestBody CreateUserdDto createUserdDto){
+        var userID = userService.createUser(createUserdDto);
         return ResponseEntity.created(URI.create("/v1/users/" + userID.toString())).build();
     }
 

@@ -12,29 +12,29 @@ public class AccountStockId {
     private UUID accountId;
 
     @Column(name = "stock_id")
-    private UUID stockId;
+    private String stockId;
 
     public AccountStockId() {
     }
 
-    public AccountStockId(UUID accountid, UUID stockId) {
-        this.accountId = accountid;
+    public AccountStockId(UUID accountId, String stockId) {
+        this.accountId = accountId;
         this.stockId = stockId;
     }
 
-    public UUID getStockId() {
-        return stockId;
-    }
-
-    public void setStockId(UUID stockId) {
-        this.stockId = stockId;
-    }
-
-    public UUID getAccountid() {
+    public UUID getAccountId() {
         return accountId;
     }
 
-    public void setAccountid(UUID accountid) {
-        this.accountId = accountid;
+    public void setAccountId(UUID accountId) {
+        this.accountId = accountId;
+    }
+
+    public String getStockId() {
+        return stockId;
+    }
+
+    public void setStockId(String stockId) {
+        this.stockId = stockId;
     }
 }
