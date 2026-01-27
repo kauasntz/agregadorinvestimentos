@@ -1,5 +1,6 @@
 package io.github.kauasntz.agregadorinvestimentos.controller;
 
+import io.github.kauasntz.agregadorinvestimentos.controller.dto.AccountResponseDto;
 import io.github.kauasntz.agregadorinvestimentos.controller.dto.CreateAccountDto;
 import io.github.kauasntz.agregadorinvestimentos.controller.dto.CreateUserdDto;
 import io.github.kauasntz.agregadorinvestimentos.controller.dto.UpdateUserDto;
@@ -62,5 +63,13 @@ public class UserController {
                                            @RequestBody CreateAccountDto createAccountDto) {
         userService.createAccount(userId, createAccountDto);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/{userId}/accounts")
+    public ResponseEntity<List<AccountResponseDto>> listAccounts(@PathVariable("userId") String userId) {
+
+        var accounts = userService.listAccounts(userId);
+
+        return ResponseEntity.ok(accounts);
     }
 }

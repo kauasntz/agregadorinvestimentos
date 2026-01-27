@@ -1,5 +1,6 @@
 package io.github.kauasntz.agregadorinvestimentos.service;
 
+import io.github.kauasntz.agregadorinvestimentos.controller.dto.AccountResponseDto;
 import io.github.kauasntz.agregadorinvestimentos.controller.dto.CreateAccountDto;
 import io.github.kauasntz.agregadorinvestimentos.controller.dto.CreateUserdDto;
 import io.github.kauasntz.agregadorinvestimentos.controller.dto.UpdateUserDto;
@@ -104,5 +105,16 @@ public class UserService {
         );
 
         billingaddressReposiory.save(billingAddress);
+    }
+
+    public List <AccountResponseDto> listAccounts(String userId) {
+
+        var user = userReposiory.findById(UUID.fromString(userId))
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        return user.getAccounts()
+                .stream()
+                .map(ac -> new AccountResponseDto(ac.getAccountId().toString(), ac.getDescription()))
+                .toList();
     }
 }
