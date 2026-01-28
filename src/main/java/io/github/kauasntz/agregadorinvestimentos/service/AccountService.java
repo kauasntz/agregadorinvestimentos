@@ -1,5 +1,6 @@
 package io.github.kauasntz.agregadorinvestimentos.service;
 
+import io.github.kauasntz.agregadorinvestimentos.controller.dto.AccountStockResponseDto;
 import io.github.kauasntz.agregadorinvestimentos.controller.dto.AssociateAccountStockDto;
 import io.github.kauasntz.agregadorinvestimentos.entity.AccountStock;
 import io.github.kauasntz.agregadorinvestimentos.entity.AccountStockId;
@@ -7,9 +8,9 @@ import io.github.kauasntz.agregadorinvestimentos.repository.AccountReposiory;
 import io.github.kauasntz.agregadorinvestimentos.repository.AccountStockReposiory;
 import io.github.kauasntz.agregadorinvestimentos.repository.StockRepository;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+import java.util.List;
 
 import java.util.UUID;
 
@@ -48,5 +49,16 @@ public class AccountService {
         );
 
         accountStockReposiory.save(entity);
+    }
+
+    public List<AccountStockResponseDto> listStocks(String accountId) {
+
+        var account = accountReposiory.findById(UUID.fromString(accountId))
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        return account.getAccountStocks()
+                .stream()
+                .map(as -> new AccountStockResponseDto(as.getStock().getStockId(), as.getQuantity(), 0.0))
+                .toList();
     }
 }
