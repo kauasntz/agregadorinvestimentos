@@ -1,9 +1,6 @@
 package io.github.kauasntz.agregadorinvestimentos.controller;
 
 import io.github.kauasntz.agregadorinvestimentos.controller.dto.CreateStockDto;
-import io.github.kauasntz.agregadorinvestimentos.controller.dto.CreateUserdDto;
-import io.github.kauasntz.agregadorinvestimentos.entity.Stock;
-import io.github.kauasntz.agregadorinvestimentos.entity.User;
 import io.github.kauasntz.agregadorinvestimentos.service.StockService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
