@@ -79,6 +79,8 @@ public class AccountService {
 
         var price = response.results().getFirst().regularMarketPrice();
 
-        return quantity * price;
+        double total = quantity * price;
+
+        return Math.round(total * 100.0) / 100.0;
     }
 }
